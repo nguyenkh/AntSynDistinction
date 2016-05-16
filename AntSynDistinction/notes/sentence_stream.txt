@@ -1,0 +1,2 @@
+Prepare training data for learning phrases
+- A sentence consists of a list of words' indices, from the vocabulary

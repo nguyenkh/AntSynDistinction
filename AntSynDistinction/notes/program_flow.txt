@@ -1,0 +1,10 @@
+Learning steps
+
+- Step 1: learning Vocab
+  + create a word stream (by default, PushBackWordStream)
+  + loop through corpus to count words' frequencies
+
+- Step 2:
+  + create a sentence stream (usually from the word stream)
+  + training from sentence by sentence
+  
