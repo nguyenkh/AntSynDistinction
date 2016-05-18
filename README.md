@@ -18,6 +18,8 @@ Code for the paper [Integrating Distributional Lexical Contrast into Word Embedd
   
 - Corpus: a plain-text corpus is used to train word embeddings.
 
+- LexicalContrast folder contains lexical contrast information used in our paper.
+
 ### Configuration
 
 See config.cfg to set agruments for model
