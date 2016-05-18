@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import space.RawSemanticSpace;
-import common.correlation.GRE;
 import common.correlation.MenCorrelation;
 
 /**
@@ -19,7 +18,6 @@ public abstract class MultiThreadWord2Vec extends AbstractWord2Vec {
     
     protected MenCorrelation men;
     protected MenCorrelation ws;
-    protected GRE gre;
     protected RawSemanticSpace outputSpace;
     protected RawSemanticSpace negSpace;
     protected long lastWordCount = 0;
@@ -48,12 +46,11 @@ public abstract class MultiThreadWord2Vec extends AbstractWord2Vec {
     }
     
     public MultiThreadWord2Vec(int projectionLayerSize, int windowSize,
-            boolean hierarchicalSoftmax, int negativeSamples, double subSample, String menFile, String wsFile, String greFile, int iter) {
+            boolean hierarchicalSoftmax, int negativeSamples, double subSample, String menFile, String wsFile, int iter) {
         this(projectionLayerSize, windowSize, hierarchicalSoftmax,
                 negativeSamples, subSample);
         men = new MenCorrelation(menFile);
         ws = new MenCorrelation(wsFile);
-        gre = new GRE(greFile);
         this.epochNum = iter;
     }
 
@@ -77,11 +74,10 @@ public abstract class MultiThreadWord2Vec extends AbstractWord2Vec {
             }
         }
         
-        
-        TrainingThread[] threads = new TrainingThread[inputStreams.size()]; //The number of sentences in the corpus
+        //The number of sentences in the corpus
+        TrainingThread[] threads = new TrainingThread[inputStreams.size()]; 
         for (int epoch = 0; epoch < epochNum; epoch++) {
             System.out.println("epoch: " + epoch);
-            //TrainingThread[] threads = new TrainingThread[inputStreams.size()];
             for (int i = 0; i < inputStreams.size(); i++) {
                 SentenceInputStream inputStream = inputStreams.get(i);
                 if (subSample > 0) {
@@ -143,13 +139,10 @@ public abstract class MultiThreadWord2Vec extends AbstractWord2Vec {
                             System.out.println("Trained: " + wordCount + " words");
                             System.out.println("Training rate: " + alpha);
                         }
-                        //do not understand yet (K.A)
                         if (men != null && outputSpace != null && iteration %100 == 0) {
                             //System.out.println("men: " + men.evaluateSpacePearson(outputSpace));
                             System.out.println("SimLex999: " + men.evaluateSpaceSpearman(outputSpace));
                             //System.out.println("WS353: " + ws.evaluateSpaceSpearman(outputSpace));
-                            System.out.println("GRE: " + gre.evaluation(outputSpace));
-//                            System.out.println("men neg: " + men.evaluateSpacePearson(negSpace));
                             printStatistics();
                         }
                     }

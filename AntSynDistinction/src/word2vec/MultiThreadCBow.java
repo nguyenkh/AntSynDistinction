@@ -21,7 +21,7 @@ public class MultiThreadCBow extends MultiThreadWord2Vec {
             boolean hierarchicalSoftmax, int negativeSamples, double subSample,
             String menFile, String wsFile, String greFile, int iter) {
         super(projectionLayerSize, windowSize, hierarchicalSoftmax, negativeSamples,
-                subSample, menFile, wsFile, greFile, iter);
+                subSample, menFile, wsFile, iter);
     }
 
     @Override

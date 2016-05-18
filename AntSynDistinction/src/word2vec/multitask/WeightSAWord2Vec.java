@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.ejml.simple.SimpleMatrix;
 
-//import vocab.VocabEntry;
 import word2vec.MultiThreadWord2Vec;
 import common.SimpleMatrixUtils;
 import common.wordnet.LexicalResourceAdj;
@@ -33,10 +32,9 @@ public class WeightSAWord2Vec extends MultiThreadWord2Vec{
     }
     
     public WeightSAWord2Vec(int projectionLayerSize, int windowSize,
-            boolean hierarchicalSoftmax, int negativeSamples, int synonymSamples, double subSample,  String menFile, 
-            String wsFile, String greFile, int iter) {
+            boolean hierarchicalSoftmax, int negativeSamples, int synonymSamples, double subSample, int iter) {
         super(projectionLayerSize, windowSize, hierarchicalSoftmax,
-                negativeSamples, subSample, menFile, wsFile, greFile, iter);
+                negativeSamples, subSample, iter);
         this.synonymSamples = synonymSamples;
     }
 
@@ -53,7 +51,8 @@ public class WeightSAWord2Vec extends MultiThreadWord2Vec{
         this.lexicalVerb = lexicalVerb;
     }
     
-    public void trainSentence(int[] sentence) {// the parameter is a list of word's indices in the vocabulary
+    public void trainSentence(int[] sentence) {
+        // the parameter is a list of word's indices in the vocabulary
         // train with the sentence
         double[] a1 = new double[projectionLayerSize];
         double[] a1error = new double[projectionLayerSize];
@@ -141,9 +140,11 @@ public class WeightSAWord2Vec extends MultiThreadWord2Vec{
 
                         }
                     }
-                    //WEIGHT PARADIGMATIC
-                    //VocabEntry contextWord = vocab.getEntry(iWordIndex);
-                    //String context = contextWord.word;            
+                    //modality 2
+                    
+                    ////////////////////////////////////////////
+                    //INTEGRATING LEXICAL CONTRAST INFORMATION
+                    ////////////////////////////////////////////
                     
                     //Compute adjective lexical
                     if (lexicalAdj.hasTarget(wordIndex) && lexicalAdj.hasFeature(iWordIndex)) {
@@ -154,28 +155,8 @@ public class WeightSAWord2Vec extends MultiThreadWord2Vec{
                         double gradient = 0;
                         int countAnts = 0;
                         int countSyns = 0;
-                        //double cosAnts = 0;
-                        //double cosSyns = 0;
                         SimpleMatrix synonymError = new SimpleMatrix(1, a1error.length);
                         SimpleMatrix antonymError = new SimpleMatrix(1, a1error.length);
-                        //in case the same synonyms
-                        /*if (isAntonyms) {
-                            Set<Integer> antonyms = lexicalAdj.intersectionAnt(wordIndex, iWordIndex);
-                            if (antonyms.isEmpty()) continue;
-                            for (Integer antonymIndex: antonyms) {
-                                SimpleMatrix antonymVector = new SimpleMatrix(1, projectionLayerSize, true, weights0[antonymIndex]);
-                                //antonymError = antonymError.plus(SimpleMatrixUtils.cosineDerivative(wordVector, antonymVector));
-                                //countAnts = countAnts + 1;
-                                Set<Integer> synsAnt = lexicalAdj.intersectionSyn(antonymIndex, iWordIndex);
-                                if (synsAnt.isEmpty()) continue;
-                                for (Integer synAntIndex: synsAnt) {
-                                    countAnts = countAnts + 1;
-                                    SimpleMatrix synAntVector = new SimpleMatrix(1, projectionLayerSize, true, weights0[synAntIndex]);
-                                    antonymError = antonymError.plus(SimpleMatrixUtils.cosineDerivative(antonymVector, synAntVector));
-                                }
-                            }
-                        }*/
-                        //in case taking synonyms of each antonym
                         if (isAntonyms) {
                             Set<Integer> antonyms = lexicalAdj.intersectionAnt(wordIndex, iWordIndex);
                             if (antonyms.isEmpty()) continue;
@@ -183,13 +164,6 @@ public class WeightSAWord2Vec extends MultiThreadWord2Vec{
                                 SimpleMatrix antonymVector = new SimpleMatrix(1, projectionLayerSize, true, weights0[antonymIndex]);
                                 antonymError = antonymError.plus(SimpleMatrixUtils.cosineDerivative(wordVector, antonymVector));
                                 countAnts = countAnts + 1;
-                                Set<Integer> synsAnt = lexicalAdj.intersectionSyn(antonymIndex, iWordIndex);
-                                if (synsAnt.isEmpty()) continue;
-                                for (Integer synAntIndex: synsAnt) {
-                                    countAnts = countAnts + 1;
-                                    SimpleMatrix synAntVector = new SimpleMatrix(1, projectionLayerSize, true, weights0[synAntIndex]);
-                                    antonymError = antonymError.plus(SimpleMatrixUtils.cosineDerivative(wordVector, synAntVector));
-                                }
                             }
                         }
                         
@@ -200,19 +174,13 @@ public class WeightSAWord2Vec extends MultiThreadWord2Vec{
                                 countSyns = countSyns + 1;
                                 SimpleMatrix synonymVector = new SimpleMatrix(1, projectionLayerSize, true, weights0[synonymIndex]);
                                 synonymError = synonymError.plus(SimpleMatrixUtils.cosineDerivative(wordVector, synonymVector));
-                                //cosSyns = cosSyns + SimpleMatrixUtils.cosine(wordVector, synonymVector);
                             }
                         }
-                        //if ((cosSyns - cosAnts >= margin) || (cosSyns - cosAnts) < 0) continue;
                         if (countAnts == 0) countAnts = 1;
                         if (countSyns == 0) countSyns = 1;
                         gradient = (double)(alpha*r);
                         a1error_temp = a1error_temp.plus(synonymError.scale(countAnts));
                         a1error_temp = a1error_temp.minus(antonymError.scale(countSyns));
-                        //a1error_temp = a1error_temp.plus(synonymError);
-                        //a1error_temp = a1error_temp.minus(antonymError.scale(countSyns));
-                        //a1error_temp = a1error_temp.plus(synonymError);
-                        //a1error_temp = a1error_temp.minus(antonymError);
                         a1error_temp = a1error_temp.scale(gradient);
                             
                         double[] errorArray = a1error_temp.getMatrix().data;
@@ -233,26 +201,8 @@ public class WeightSAWord2Vec extends MultiThreadWord2Vec{
                         double gradient = 0;
                         int countAnts = 0;
                         int countSyns = 0;
-                        //double cosAnts = 0;
-                        //double cosSyns = 0;
                         SimpleMatrix synonymError = new SimpleMatrix(1, a1error.length);
                         SimpleMatrix antonymError = new SimpleMatrix(1, a1error.length);
-                        /*if (isAntonyms) {
-                            Set<Integer> antonyms = lexicalNoun.intersectionAnt(wordIndex, iWordIndex);
-                            if (antonyms.isEmpty()) continue;
-                            for (Integer antonymIndex: antonyms) {
-                                SimpleMatrix antonymVector = new SimpleMatrix(1, projectionLayerSize, true, weights0[antonymIndex]);
-                                //antonymError = antonymError.plus(SimpleMatrixUtils.cosineDerivative(wordVector, antonymVector));
-                                //countAnts = countAnts + 1;
-                                Set<Integer> synsAnt = lexicalNoun.intersectionSyn(antonymIndex, iWordIndex);
-                                if (synsAnt.isEmpty()) continue;
-                                for (Integer synAntIndex: synsAnt) {
-                                    countAnts = countAnts + 1;
-                                    SimpleMatrix synAntVector = new SimpleMatrix(1, projectionLayerSize, true, weights0[synAntIndex]);
-                                    antonymError = antonymError.plus(SimpleMatrixUtils.cosineDerivative(antonymVector, synAntVector));
-                                }
-                            }
-                        }*/
                         if (isAntonyms) {
                             Set<Integer> antonyms = lexicalNoun.intersectionAnt(wordIndex, iWordIndex);
                             if (antonyms.isEmpty()) continue;
@@ -260,13 +210,6 @@ public class WeightSAWord2Vec extends MultiThreadWord2Vec{
                                 SimpleMatrix antonymVector = new SimpleMatrix(1, projectionLayerSize, true, weights0[antonymIndex]);
                                 antonymError = antonymError.plus(SimpleMatrixUtils.cosineDerivative(wordVector, antonymVector));
                                 countAnts = countAnts + 1;
-                                Set<Integer> synsAnt = lexicalNoun.intersectionSyn(antonymIndex, iWordIndex);
-                                if (synsAnt.isEmpty()) continue;
-                                for (Integer synAntIndex: synsAnt) {
-                                    countAnts = countAnts + 1;
-                                    SimpleMatrix synAntVector = new SimpleMatrix(1, projectionLayerSize, true, weights0[synAntIndex]);
-                                    antonymError = antonymError.plus(SimpleMatrixUtils.cosineDerivative(wordVector, synAntVector));
-                                }
                             }
                         }
                         
@@ -277,21 +220,14 @@ public class WeightSAWord2Vec extends MultiThreadWord2Vec{
                                 countSyns = countSyns + 1;
                                 SimpleMatrix synonymVector = new SimpleMatrix(1, projectionLayerSize, true, weights0[synonymIndex]);
                                 synonymError = synonymError.plus(SimpleMatrixUtils.cosineDerivative(wordVector, synonymVector));
-                                //cosSyns = cosSyns + SimpleMatrixUtils.cosine(wordVector, synonymVector);
                             }
                         }
-                      //if ((cosSyns - cosAnts >= margin) || (cosSyns - cosAnts) < 0) continue;
                         if (countAnts == 0) countAnts = 1;
                         if (countSyns == 0) countSyns = 1;
                         gradient = (double)(alpha*r);
                         a1error_temp = a1error_temp.plus(synonymError.scale(countAnts));
                         a1error_temp = a1error_temp.minus(antonymError.scale(countSyns));
-                        //a1error_temp = a1error_temp.plus(synonymError);
-                        //a1error_temp = a1error_temp.minus(antonymError.scale(countSyns));
-                        //a1error_temp = a1error_temp.plus(synonymError);
-                        //a1error_temp = a1error_temp.minus(antonymError);
                         a1error_temp = a1error_temp.scale(gradient);
-                            
                         double[] errorArray = a1error_temp.getMatrix().data;
                             
                         // Learn weights input -> hidden
@@ -310,26 +246,8 @@ public class WeightSAWord2Vec extends MultiThreadWord2Vec{
                         double gradient = 0;
                         int countAnts = 0;
                         int countSyns = 0;
-                        //double cosAnts = 0;
-                        //double cosSyns = 0;
                         SimpleMatrix synonymError = new SimpleMatrix(1, a1error.length);
                         SimpleMatrix antonymError = new SimpleMatrix(1, a1error.length);
-                        /*if (isAntonyms) {
-                            Set<Integer> antonyms = lexicalVerb.intersectionAnt(wordIndex, iWordIndex);
-                            if (antonyms.isEmpty()) continue;
-                            for (Integer antonymIndex: antonyms) {
-                                SimpleMatrix antonymVector = new SimpleMatrix(1, projectionLayerSize, true, weights0[antonymIndex]);
-                                //antonymError = antonymError.plus(SimpleMatrixUtils.cosineDerivative(wordVector, antonymVector));
-                                //countAnts = countAnts + 1;
-                                Set<Integer> synsAnt = lexicalVerb.intersectionSyn(antonymIndex, iWordIndex);
-                                if (synsAnt.isEmpty()) continue;
-                                for (Integer synAntIndex: synsAnt) {
-                                    countAnts = countAnts + 1;
-                                    SimpleMatrix synAntVector = new SimpleMatrix(1, projectionLayerSize, true, weights0[synAntIndex]);
-                                    antonymError = antonymError.plus(SimpleMatrixUtils.cosineDerivative(antonymVector, synAntVector));
-                                }
-                            }
-                        }*/
                         if (isAntonyms) {
                             Set<Integer> antonyms = lexicalVerb.intersectionAnt(wordIndex, iWordIndex);
                             if (antonyms.isEmpty()) continue;
@@ -337,39 +255,24 @@ public class WeightSAWord2Vec extends MultiThreadWord2Vec{
                                 SimpleMatrix antonymVector = new SimpleMatrix(1, projectionLayerSize, true, weights0[antonymIndex]);
                                 antonymError = antonymError.plus(SimpleMatrixUtils.cosineDerivative(wordVector, antonymVector));
                                 countAnts = countAnts + 1;
-                                Set<Integer> synsAnt = lexicalVerb.intersectionSyn(antonymIndex, iWordIndex);
-                                if (synsAnt.isEmpty()) continue;
-                                for (Integer synAntIndex: synsAnt) {
-                                    countAnts = countAnts + 1;
-                                    SimpleMatrix synAntVector = new SimpleMatrix(1, projectionLayerSize, true, weights0[synAntIndex]);
-                                    antonymError = antonymError.plus(SimpleMatrixUtils.cosineDerivative(wordVector, synAntVector));
-                                }
                             }
                         }
                         
                         if (isSynonyms) {
-                            //HashSet<String> synonyms = lexicalVerb.intersectionSyn(percept, context);
                             Set<Integer> synonyms = lexicalVerb.intersectionSyn(wordIndex, iWordIndex);
                             if (synonyms.isEmpty()) continue;
                             for (Integer synonymIndex: synonyms) {
                                 countSyns = countSyns + 1;
                                 SimpleMatrix synonymVector = new SimpleMatrix(1, projectionLayerSize, true, weights0[synonymIndex]);
                                 synonymError = synonymError.plus(SimpleMatrixUtils.cosineDerivative(wordVector, synonymVector));
-                                //cosSyns = cosSyns + SimpleMatrixUtils.cosine(wordVector, synonymVector);
                             }
                         }
-                        //if ((cosSyns - cosAnts >= margin) || (cosSyns - cosAnts) < 0) continue;
                         if (countAnts == 0) countAnts = 1;
                         if (countSyns == 0) countSyns = 1;
                         gradient = (double)(alpha*r);
                         a1error_temp = a1error_temp.plus(synonymError.scale(countAnts));
                         a1error_temp = a1error_temp.minus(antonymError.scale(countSyns));
-                        //a1error_temp = a1error_temp.plus(synonymError);
-                        //a1error_temp = a1error_temp.minus(antonymError.scale(countSyns));
-                        //a1error_temp = a1error_temp.plus(synonymError);
-                        //a1error_temp = a1error_temp.minus(antonymError);
                         a1error_temp = a1error_temp.scale(gradient);
-                            
                         double[] errorArray = a1error_temp.getMatrix().data;
                             
                         // Learn weights input -> hidden
