@@ -20,7 +20,7 @@ Code for the paper [Integrating Distributional Lexical Contrast into Word Embedd
 
 ### Configuration
 
-See config.cfg to set agruments for model
+See config.cfg to set agruments for model.
 
 ### Running model
 
