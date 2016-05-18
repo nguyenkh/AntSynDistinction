@@ -18,11 +18,15 @@ Code for the paper [Integrating Distributional Lexical Contrast into Word Embedd
   
 - Corpus: a plain-text corpus is used to train word embeddings.
 
-### Compile
+### Configuration
 
-
+See config.cfg to set agruments for model
 
 ### Running model
+
+  ```java -jar dLCE.jar config.cfg vector-size adj-boolean noun-boolean verb-boolean iteration```
+For example, training model with 300 dimensions; lexical contrast for adj, noun, verb; and 3 iterations: 
+  ```java -jar dLCE.jar config.cfg 300 True True True 3```
 
 ### Reference
 ```
