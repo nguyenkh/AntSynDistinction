@@ -71,7 +71,7 @@ public class AntSynDistinctionLearning {
             vocab.saveVocab(vocabFile);
         }
         
-        word2vec = new WeightSAWord2Vec(size, window, softmax, negativeSamples, 5, subSampling, iter);
+        word2vec = new WeightSAWord2Vec(size, window, softmax, negativeSamples, subSampling, iter);
         if (!(noun || adj || verb)) {
             throw new ValueException("should train with at least one lexical resource");
         } else {

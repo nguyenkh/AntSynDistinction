@@ -12,10 +12,8 @@ import common.wordnet.LexicalResourceNoun;
 import common.wordnet.LexicalResourceVerb;
 
 public class WeightSAWord2Vec extends MultiThreadWord2Vec{
-    public static final int DEFAULT_SYNONYM_SAMPLES = 5;
     public static final double DEFAULT_MARGIN = 0.4;
     public static final double DEFAULT_ANTONYM_IMPORTANCE = 8.0;
-    protected int synonymSamples = DEFAULT_SYNONYM_SAMPLES;
     protected double margin = DEFAULT_MARGIN;
     
     protected LexicalResourceAdj lexicalAdj;
@@ -25,17 +23,15 @@ public class WeightSAWord2Vec extends MultiThreadWord2Vec{
     
     
     public WeightSAWord2Vec(int projectionLayerSize, int windowSize,
-            boolean hierarchicalSoftmax, int negativeSamples, int synonymSamples, double subSample) {
+            boolean hierarchicalSoftmax, int negativeSamples, double subSample) {
         super(projectionLayerSize, windowSize, hierarchicalSoftmax,
                 negativeSamples, subSample);
-        this.synonymSamples = synonymSamples;
     }
     
     public WeightSAWord2Vec(int projectionLayerSize, int windowSize,
-            boolean hierarchicalSoftmax, int negativeSamples, int synonymSamples, double subSample, int iter) {
+            boolean hierarchicalSoftmax, int negativeSamples, double subSample, int iter) {
         super(projectionLayerSize, windowSize, hierarchicalSoftmax,
                 negativeSamples, subSample, iter);
-        this.synonymSamples = synonymSamples;
     }
 
     public void setForbiddenWords(HashSet<String> forbiddenWords) {
