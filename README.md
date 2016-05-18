@@ -1,4 +1,4 @@
-# Antonym-Syntonym Distinction
+## Antonym-Syntonym Distinction
 Kim Anh Nguyen, nguyenkh@ims.uni-stuttgart.de
 
 Code for the paper [Integrating Distributional Lexical Contrast into Word Embeddings for Antonym-Synonym Distinction](http://www.ims.uni-stuttgart.de/institut/mitarbeiter/anhnk/papers/ant-syn-distinction.pdf) (ACL 2016). For more details please refer to Nguyen et al. (2016).
