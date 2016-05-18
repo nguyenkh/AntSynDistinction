@@ -28,11 +28,11 @@ See config.cfg to set agruments for model
 
 Command line:
 
-  ```java -jar dLCE.jar config.cfg vector-size adj-boolean noun-boolean verb-boolean iteration```
+  ```java -jar dLCE.jar config.cfg vector-size window-size adj-boolean noun-boolean verb-boolean iteration```
   
-For example, training model with 300 dimensions; lexical contrast of adj, noun, verb; and 3 iterations:
+For example, training model with 300 dimensions; window-size = 5; lexical contrast of adj, noun, verb; and 3 iterations:
 
-  ```java -jar dLCE.jar config.cfg 300 True True True 3```
+  ```java -jar dLCE.jar config.cfg 300 5 True True True 3```
 
 ### Reference
 ```
