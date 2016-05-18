@@ -29,14 +29,15 @@ public class AntSynDistinctionLearning {
         MultiThreadWord2Vec word2vec = null;
         String configFile = args[0]; 
         int size = Integer.parseInt(args[1]);
-        boolean adj = Boolean.parseBoolean(args[2]);
-        boolean noun = Boolean.parseBoolean(args[3]);
-        boolean verb = Boolean.parseBoolean(args[4]);
-        int iter = Integer.parseInt(args[5]);
+        int window = Integer.parseInt(args[2]);
+        boolean adj = Boolean.parseBoolean(args[3]);
+        boolean noun = Boolean.parseBoolean(args[4]);
+        boolean verb = Boolean.parseBoolean(args[5]);
+        int iter = Integer.parseInt(args[6]);
         
         String forbiddenWordFile = null;
-        if (args.length == 7) {
-            forbiddenWordFile = args[6];
+        if (args.length == 8) {
+            forbiddenWordFile = args[7];
         }
         W2vProperties properties = new W2vProperties(configFile);
         boolean softmax = Boolean.parseBoolean(properties.getProperty("HierarchialSoftmax"));
@@ -70,7 +71,7 @@ public class AntSynDistinctionLearning {
             vocab.saveVocab(vocabFile);
         }
         
-        word2vec = new WeightSAWord2Vec(size, 5, softmax, negativeSamples, 5, subSampling, iter);
+        word2vec = new WeightSAWord2Vec(size, window, softmax, negativeSamples, 5, subSampling, iter);
         if (!(noun || adj || verb)) {
             throw new ValueException("should train with at least one lexical resource");
         } else {
