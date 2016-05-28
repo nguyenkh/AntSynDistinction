@@ -12,7 +12,7 @@ Code for the paper [Integrating Distributional Lexical Contrast into Word Embedd
 
   ```good	practiced	expert	skillful	in-force	well	estimable	secure	beneficial	unspoilt	dear	honest...```
 
-- Context files (adj, noun, verb) that refer as W(c) in the Equation 3: Each line contains one context word (only considers adj, noun, verb as contexts and target words) and its target (tab delimited). Considering two sentences, for example, ```The cat sat on the mat``` and ```The dog sat on the matress```, the context ```sat``` is collected as follows (window size = 5):
+- Context files (adj, noun, verb) that refer as W(c) in the Equation 3: Each line contains one context word (only considers adj, noun, verb as contexts) and its target words (tab delimited). Considering two sentences, for example, ```The cat sat on the mat``` and ```The dog sat on the matress```, the context ```sat``` is collected as follows (window size = 5):
 
   ```sat  cat mat dog matress```
   
