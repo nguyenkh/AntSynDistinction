@@ -1,9 +1,0 @@
-For reading input
-- output word by word (in String)
-
-Subclass:
-- PushBackWordStream: read from a file, allow looking back in other to correctly
-  separate words
-- RandomAccessWordStream: read from a file, allow seeking (more powerful than
-  just push back)
-- CombinedWordInputStream: combine word streams together
