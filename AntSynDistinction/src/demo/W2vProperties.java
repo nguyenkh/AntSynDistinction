@@ -37,6 +37,11 @@ public class W2vProperties{
         String vocabFile = outputDir + "/" + vocabFileName;
         properties.setProperty("VocabFile", vocabFile);
         
+        // OUTPUT W2V
+        
+        String wordVectorFileName = properties.getProperty("WordVectorFileName");
+        String wordVectorFilePath = outputDir + "/" + wordVectorFileName;
+        properties.setProperty("WordVectorFile", wordVectorFilePath);
     }
     
     public String getProperty(String key) {
