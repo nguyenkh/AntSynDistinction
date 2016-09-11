@@ -11,7 +11,7 @@ import argparse
 def main():
     """
     Format of input file likes: target \t context \t Freq \t LMI
-    Usage: python -input <contexts_file> -output <features_file>
+    Usage: python create_features.py -input <contexts_file> -output <features_file>
     """
     parser = argparse.ArgumentParser()
     parser.add_argument('-input', type=str)
