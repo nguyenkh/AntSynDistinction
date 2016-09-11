@@ -14,9 +14,13 @@ Code for the paper [Integrating Distributional Lexical Contrast into Word Embedd
 
 - Context files (adj, noun, verb) that refer as W(c) in the Equation 3:
 
-  - Extract relations between target and contexts: ```python create_contexts.py -input <corpus_name> -output <output-file-name>```
+  - Extract relations between target and contexts: 
+
+    ```python create_contexts.py -input <corpus_name> -output <output-file-name>```
   
-  - Create features (across adj, noun, verb): ```python -input <contexts_file> -output <features_file>```
+  - Create features (across adj, noun, verb): 
+    
+    ```python -input <contexts_file> -output <features_file>```
   
 - Corpus: a plain-text corpus is used to train word embeddings.
 
