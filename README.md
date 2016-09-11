@@ -20,7 +20,7 @@ Code for the paper [Integrating Distributional Lexical Contrast into Word Embedd
   
   - Create features (across adj, noun, verb): 
     
-    ```python -input <contexts_file> -output <features_file>```
+    ```python create_features.py -input <contexts_file> -output <features_file>```
   
 - Corpus: a plain-text corpus is used to train word embeddings.
 
