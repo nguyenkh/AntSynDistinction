@@ -13,10 +13,12 @@ Code for the paper [Integrating Distributional Lexical Contrast into Word Embedd
   ```good	practiced	expert	skillful	in-force	well	estimable	secure	beneficial	unspoilt	dear	honest...```
 
 - Context files (adj, noun, verb) that refer as W(c) in the Equation 3:
+  
+  - To create files of features, the system requires the [spaCy](https://spacy.io) tool.   
 
   - Extract relations between target and contexts: 
 
-    ```python create_contexts.py -input <corpus_name> -output <output-file-name>```
+    ```python create_contexts.py -input <corpus_file> -output <output-file-name>```
   
   - Create features (across adj, noun, verb): 
     
