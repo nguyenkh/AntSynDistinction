@@ -39,6 +39,9 @@ Command line:
 For example, training model with 300 dimensions; window-size = 5; lexical contrast of adj, noun, verb; and 3 iterations:
 
   ```java -jar dLCE.jar config.cfg 300 5 True True True 3```
+  
+### Pre-trained embeddings
+- Wikipedia corpus, 100dim, min-count=100: [dLCE_100d_minFreq_100](http://www.ims.uni-stuttgart.de/data/dLCE/wiki_en_dLCE_100d_minFreq_100.bin)
 
 ### Reference
 ```
