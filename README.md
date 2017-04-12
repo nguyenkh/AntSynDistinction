@@ -42,6 +42,7 @@ For example, training model with 300 dimensions; window-size = 5; lexical contra
   
 ### Pre-trained embeddings
 - Wikipedia corpus, 100dim, min-count=100: [dLCE_100d_minFreq_100](http://www.ims.uni-stuttgart.de/data/dLCE/wiki_en_dLCE_100d_minFreq_100.bin)
+- Wikipedia corpus, 100dim, min-count=5: [dLCE_100d_minFreq_5](http://www.ims.uni-stuttgart.de/data/dLCE/wiki_en_dLCE_100d_minFreq_5.bin)
 
 ### Reference
 ```
